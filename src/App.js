@@ -19,14 +19,12 @@ import Navbar from "./component/Navbar";
 class App extends Component {
   render() {
     return (
-      <div className="w-screen h-auto absolute ">
-        <Navbar />
-
+      <div className="w-screen h-auto absolute">
         <Router>
           <Switch>
             <Route exact path={["/", "/signIn"]} component={SignInScreen} />
+            <Route path="/home" component={Home} />
 
-            <Route exact path={"/home"} component={Home} />
           </Switch>
         </Router>
       </div >

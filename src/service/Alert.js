@@ -24,7 +24,25 @@ class Alert {
             });
         });
     }
+    getLoginAlert() {
+        return MySwal.fire({
+            icon: "success",
+            title: "Login Pass",
+            showConfirmButton: false,
+            timer: 1000,
+        });
+    }
 
+    getLoginAlertFail() {
+		return MySwal.fire({
+			icon: "error",
+			title: "Oops...",
+			text: "Username or password does not match ",
+			footer: '<a href="">Reset password?</a>',
+
+		});
+	}
+    
     getGeneralAlertMsg(icon, titleMsg, textMsg = "", timer = 1500) {
         return MySwal.fire({
             icon: `${icon}`,

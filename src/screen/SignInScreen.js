@@ -5,7 +5,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -16,6 +15,9 @@ import { Redirect, withRouter } from "react-router";
 import Authentication from "../service/Authentication";
 import Home from "../screen/Home";
 import { blue } from "@mui/material/colors";
+import logo from "../assets/images/suesi_logo_2.png"
+import { Link } from "react-router-dom";
+import Alert from "../service/Alert";
 const theme = createTheme();
 class SignInScreen extends Component {
   constructor(props) {
@@ -27,17 +29,27 @@ class SignInScreen extends Component {
     };
   }
 
+
   handleSubmit(event) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     let username = data.get("username");
     let password = data.get("password");
-    console.log(username, password);
-    Authentication.signIn(username, password).then((res) => {
-      console.log(res);
-      this.setState({
-        isRedirect: true
-      })
+
+    Authentication.signIn(username, password).then(async (res) => {
+      let user = Authentication.deCodeJwt(res)
+      console.log(user.roles[0])
+      if (user.roles[0] === "ADMIN") {
+        await Alert.getLoginAlert(); this.setState({
+          isRedirect: await true
+        })
+      } else {
+        Alert.getLoginAlertFail()
+      }
+
+
+    }, (error) => {
+      Alert.getLoginAlertFail()
     });
   }
 
@@ -72,11 +84,12 @@ class SignInScreen extends Component {
               alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <img src={logo} className="w-auto h-36 p-2" />
+            {/* <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />
-            </Avatar>
+            </Avatar> */}
             <Typography component="h1" variant="h5">
-              Sign in with admin
+              Sign in with suesi admin
             </Typography>
             <Box
               component="form"
@@ -129,13 +142,14 @@ class SignInScreen extends Component {
           </Box>
           <this.Copyright sx={{ mt: 8, mb: 4 }} />
         </Container>
+
       </ThemeProvider>
     );
   }
 
   render() {
     const { isRedirect } = this.state;
-    return (isRedirect ? <Redirect to="/home" /> : <div>{this.renderSignForm()}</div>)
+    return (isRedirect ? <Redirect to="/home" /> : <div className="  ">{this.renderSignForm()}</div>)
 
   }
 }

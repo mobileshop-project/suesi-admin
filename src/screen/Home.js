@@ -1,44 +1,56 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router";
+import { withRouter } from "react-router-dom";
 import { DataGrid, GridRowsProp, GridColDef } from "@mui/x-data-grid";
 import { DataGridPro } from '@mui/x-data-grid-pro';
+import { useDemoData } from "@mui/x-data-grid-generator";
+import Navbar from "../component/Navbar";
+import { BottomNavigation } from '@mui/material';
+import { BottomNavigationAction } from '@mui/material';
+import RestoreIcon from '@mui/icons-material/Restore';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { Box } from "@mui/material";
+
 class Home extends Component {
   constructor(props) {
-    super(props);
+    super(props)
+
     this.state = {
-      rows: [
-        { id: 1, col1: "Hello", col2: "World" },
-        { id: 2, col1: "XGrid", col2: "is Awesome" },
-        { id: 3, col1: "Material-UI", col2: "is Amazing" },
-        { id: 4, col1: "Hello", col2: "World" },
-        { id: 5, col1: "XGrid", col2: "is Awesome" },
-        { id: 6, col1: "Material-UI2", col2: "is Amazing" },
-      ],
-      columns: [
-        { field: "col1", headerName: "Column 1", width: 150 },
-        { field: "col2", headerName: "Column 2", width: 150 },
-      ],
-    };
+      value: 0,
+      setValue: 0
+    }
+  }
+
+
+  renderMenu() {
+    const { value, setValue } = this.state
+    return (
+      <div className="bg-red-200 flex justify-center h-12 w-full">
+        <Box sx={{ width: 500 }}>
+          <BottomNavigation
+            showLabels
+            value={value}
+            onChange={(event, newValue) => {
+              setValue(newValue);
+            }}
+          >
+            <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
+            <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+            <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+          </BottomNavigation>
+        </Box>
+        <div className="bg-yellow-200 h-12 w-auto"> Petition</div>
+        <div className="bg-yellow-200 h-12 w-auto"> Petition</div>
+      </div>)
   }
 
   render() {
-    const columns: GridColDef[] = [
-      { field: "col1", headerName: "Column 1", width: 150 },
-      { field: "col2", headerName: "Column 2", width: 150 },
-    ];
 
-    const rows: GridRowsProp = [
-      { id: 1, col1: "Hello", col2: "World" },
-      { id: 2, col1: "DataGridPro", col2: "is Awesome" },
-      { id: 3, col1: "MUI", col2: "is Amazing" },
-    ];
 
     return (
       <div>
-        {console.log(this.state.rows.length)}
-        <div style={{ height: 300, width: "100%" }}>
-          <DataGridPro rows={rows} columns={columns} />
-        </div>
+        <Navbar />
+        {this.renderMenu()}
       </div>
     );
   }
