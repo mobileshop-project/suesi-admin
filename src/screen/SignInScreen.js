@@ -53,23 +53,23 @@ class SignInScreen extends Component {
     });
   }
 
-  Copyright(props) {
-    return (
-      <Typography
-        variant="body2"
-        color="text.secondary"
-        align="center"
-        {...props}
-      >
-        {"Copyright © "}
-        <Link color="inherit" href="https://mui.com/">
-          2021 ยังไม่คิด.COM. All Rights Reserved.
-        </Link>{" "}
-        {new Date().getFullYear()}
-        {"."}
-      </Typography>
-    );
-  }
+  // Copyright(props) {
+  //   return (
+  //     <Typography
+  //       variant="body2"
+  //       color="text.secondary"
+  //       align="center"
+  //       {...props}
+  //     >
+  //       {"Copyright © "}
+  //       <Link color="inherit" href="https://mui.com/">
+  //         2021 ยังไม่คิด.COM. All Rights Reserved.
+  //       </Link>{" "}
+  //       {new Date().getFullYear()}
+  //       {"."}
+  //     </Typography>
+  //   );
+  // }
 
   renderSignForm() {
     return (
@@ -140,7 +140,7 @@ class SignInScreen extends Component {
             </Grid> */}
             </Box>
           </Box>
-          <this.Copyright sx={{ mt: 8, mb: 4 }} />
+          {/* <this.Copyright sx={{ mt: 8, mb: 4 }} /> */}
         </Container>
 
       </ThemeProvider>

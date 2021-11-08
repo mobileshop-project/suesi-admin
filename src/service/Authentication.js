@@ -7,7 +7,7 @@ import TokenService from "./TokenService";
 import jwt_decode from "jwt-decode";
 const querystring = require("querystring");
 
-class Authentication extends Component {
+class Authentication {
   signIn(username, password) {
     const data = querystring.stringify({
       username: username,

@@ -11,10 +11,9 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { blue } from "@mui/material/colors";
 import Alert from "../service/Alert";
-import SideBar from "./SideBar";
+import Menu from "./Menu";
 
-
-
+ 
 class Navbar extends Component {
     constructor(props) {
         super(props);
@@ -39,7 +38,7 @@ class Navbar extends Component {
                 navbarOpen: false,
                 showSeller: false,
             });
-            this.props.history.push("/signIn")
+
         });
     }
 
@@ -71,7 +70,7 @@ class Navbar extends Component {
     render() {
         const { isRedirect } = this.state
         return (<div>
-            {/* <div className="absolute z-10"> <SideBar /></div> */}
+            {/* <div className="absolute z-10"> <Menu /></div> */}
             <div className="z-50">
                 {this.renderNav()}</div>
         </div>)

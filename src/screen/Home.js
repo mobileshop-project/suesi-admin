@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+import { Link, withRouter, Route, Switch, Redirect } from "react-router-dom";
 import { DataGrid, GridRowsProp, GridColDef } from "@mui/x-data-grid";
 import { DataGridPro } from '@mui/x-data-grid-pro';
 import { useDemoData } from "@mui/x-data-grid-generator";
@@ -10,7 +10,13 @@ import RestoreIcon from '@mui/icons-material/Restore';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { Box } from "@mui/material";
-
+import { Button } from "@mui/material";
+import ShopList from "./ShopListScreen";
+import { Toolbar } from '@mui/material';
+import Menu from "../component/Menu"
+import ApprovalScreen from "./ApprovalScreen";
+import ShopListScreen from "./ShopListScreen";
+import UserListScreen from "./UserListScreen";
 class Home extends Component {
   constructor(props) {
     super(props)
@@ -22,25 +28,12 @@ class Home extends Component {
   }
 
 
+
   renderMenu() {
     const { value, setValue } = this.state
     return (
-      <div className="bg-red-200 flex justify-center h-12 w-full">
-        <Box sx={{ width: 500 }}>
-          <BottomNavigation
-            showLabels
-            value={value}
-            onChange={(event, newValue) => {
-              setValue(newValue);
-            }}
-          >
-            <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
-            <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-            <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
-          </BottomNavigation>
-        </Box>
-        <div className="bg-yellow-200 h-12 w-auto"> Petition</div>
-        <div className="bg-yellow-200 h-12 w-auto"> Petition</div>
+      <div  >
+        <Menu />
       </div>)
   }
 
@@ -51,6 +44,11 @@ class Home extends Component {
       <div>
         <Navbar />
         {this.renderMenu()}
+        <Switch>
+          <Route path={"/approval"} component={ApprovalScreen} />
+          <Route path={"/shopList"} component={ShopListScreen} />
+          <Route path={"/userList"} component={UserListScreen} />
+        </Switch>
       </div>
     );
   }
