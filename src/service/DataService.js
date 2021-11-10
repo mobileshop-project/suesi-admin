@@ -1,14 +1,16 @@
 import api from "./api";
-import React, { Component } from 'react'
-import axios from "axios";
+ 
 
 class DataService {
     fetchShopData() {
-        return api.get("shop")
+        return api.get("shop?pageSize=100")
     }
 
     fetchUserData() {
-        return api.get("user")
+        return api.get("user?pageSize=100")
+    }
+    fetchApproveData() {
+        return api.get("admin/considerSeller?pageSize=100")
     }
 }
 export default new DataService()

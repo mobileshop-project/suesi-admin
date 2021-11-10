@@ -1,6 +1,4 @@
-import React, {
-  Component
-} from "react";
+ 
 import api from "./api";
 import tokenService from "./TokenService";
 import TokenService from "./TokenService";

@@ -5,11 +5,12 @@ import { withRouter } from 'react-router';
 import FormCard from "../component/FormCard"
 import DataService from '../service/DataService';
 import EditIcon from "@material-ui/icons/Edit";
+import { purple, red, green } from '@mui/material/colors';
+import { createTheme } from '@mui/material/styles';
 
 
 class ShopList extends Component {
     constructor(props) {
-
         super(props);
 
         this.state = {
@@ -23,16 +24,12 @@ class ShopList extends Component {
 
     }
 
-
     getShopData() {
         DataService.fetchShopData().then(async (res) => {
             await this.ReplaceId(res.data)
 
         })
     }
-
-
-
 
     ReplaceId(jsonObj) {
         let json = jsonObj
@@ -45,7 +42,10 @@ class ShopList extends Component {
 
 
     renderShop() {
+
+
         const columns: GridColDef[] = [
+            { field: "id", headerName: "shop id", width: 80 },
             { field: "shopName", headerName: "Shop name", width: 150 },
             { field: "shopType", headerName: "Shop type", width: 150 },
             { field: "col3", headerName: "Status", width: 150 },
@@ -57,7 +57,7 @@ class ShopList extends Component {
                 disableClickEventBubbling: true,
                 renderCell: () => {
                     return (
-                        <Button variant="contained" color="primary"  >
+                        <Button variant="contained" style={{ backgroundColor: green["A700"] }}  >
                             OPEN
                         </Button>
                     );
@@ -86,7 +86,7 @@ class ShopList extends Component {
 
             <div className="flex items-center justify-center mt-4">
                 {/* <button onClick={() => this.getShopData()}>aaaaa</button> */}
-                <FormCard className="p-2  rounded-md">   {this.renderShop()}  </FormCard>
+                <FormCard background="#eeeeee" className="p-2  rounded-md">   {this.renderShop()}  </FormCard>
 
 
             </div>

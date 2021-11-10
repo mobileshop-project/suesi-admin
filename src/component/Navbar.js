@@ -1,19 +1,18 @@
 import React, { Component } from "react";
 
-import { Link, Redirect, withRouter } from "react-router-dom";
+import { Link , withRouter } from "react-router-dom";
 import { Button } from "@mui/material";
 import logo from "../assets/images/suesi_logo.png";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
+ 
 import { blue } from "@mui/material/colors";
 import Alert from "../service/Alert";
-import Menu from "./Menu";
-
  
+
+
 class Navbar extends Component {
     constructor(props) {
         super(props);
@@ -61,6 +60,8 @@ class Navbar extends Component {
                     <Typography className="cursor-default" variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Admin Manager
                     </Typography>
+                    <Button onClick={this.logout.bind(this)} color="inherit">Bew</Button>
+   
                     <Button onClick={this.logout.bind(this)} color="inherit">Logout</Button>
                 </Toolbar>
             </AppBar>
@@ -68,7 +69,7 @@ class Navbar extends Component {
     }
 
     render() {
-        const { isRedirect } = this.state
+        // const { isRedirect } = this.state
         return (<div>
             {/* <div className="absolute z-10"> <Menu /></div> */}
             <div className="z-50">

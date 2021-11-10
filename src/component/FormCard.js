@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 const FormCard = styled.div`
   display: flex;
-  background: ${props => props.background ? props.background : "#ffcc80"};
+  background: ${props => props.background ? props.background : "white"};
   width: ${props => props.width ? props.width : '65%'};
   height: ${props => props.height ? props.height : '100%'};
   border: ${props => props.border ? props.border : 'none'};
