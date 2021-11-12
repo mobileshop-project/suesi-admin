@@ -7,7 +7,7 @@ class DataService {
     }
 
     fetchUserData() {
-        return api.get("user?pageSize=100")
+        return api.get("user?pageSize=100&isMonitor=true")
     }
     fetchApproveData() {
         return api.get("admin/considerSeller?pageSize=100")

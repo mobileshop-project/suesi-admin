@@ -4,9 +4,10 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router';
 import FormCard from "../component/FormCard"
 import DataService from '../service/DataService';
- 
-import {  green } from '@mui/material/colors';
- 
+import cat from "../assets/images/nyan-cat.gif";
+import { green } from '@mui/material/colors';
+import Authentication from '../service/Authentication';
+
 
 
 class UserListScreen extends Component {
@@ -14,30 +15,42 @@ class UserListScreen extends Component {
         super(props);
 
         this.state = {
-            DataWithReplaceID: null
+            DataWithReplaceID: null,
+            isLoading: true
         }
 
     }
 
     async componentDidMount() {
-        await this.getUserData()
+        await this.getUser()
+        await this.getUserListData()
 
 
     }
 
-    getUserData() {
+    getUserListData() {
         DataService.fetchUserData().then(async (res) => {
             await this.ReplaceId(res.data)
 
         })
     }
 
+    getUser() {
+        const user = Authentication.getDecodeUser()
+        console.log(user)
+        this.setState({
+            accountCode: user.accountCode
+        })
+
+    }
+
     ReplaceId(jsonObj) {
         let json = jsonObj
-        let newJson = JSON.parse(JSON.stringify(json).split('"appAccountCode":').join('"id":'));
+        let newJson = JSON.parse(JSON.stringify(json).split('"accountCode":').join('"id":'));
         console.log(newJson)
         this.setState({
-            DataWithReplaceID: newJson
+            DataWithReplaceID: newJson,
+            isLoading: false
         })
         // this.convertRole(newJson)
     }
@@ -47,18 +60,18 @@ class UserListScreen extends Component {
         const rows1 = newJson
         const rows2 = newJson
 
-    //    let x = delete rows1.roles;
+        //    let x = delete rows1.roles;
         console.log("--------rows1-------------")
-     
+
         console.log(rows2)
         const list1 = rows2.map(user => {
-            return  user.roles
- 
+            return user.roles
+
         });
-        console.log(rows1.map(obj => delete rows1.roles ));
+        console.log(rows1.map(obj => delete rows1.roles));
         const list2 = list1.map(roles => {
             return {
-                roles: roles[0]  
+                roles: roles[0]
             }
         });
 
@@ -80,11 +93,11 @@ class UserListScreen extends Component {
         console.log(merged)
     }
 
-    renderShop() {
+    renderUser() {
 
 
         const columns: GridColDef[] = [
-            { field: "id", headerName: "id", width: 80 },
+            { field: "id", headerName: "Id", width: 80 },
             { field: "username", headerName: "username", width: 150 },
             { field: "role", headerName: "role", width: 150 },
             { field: "active", headerName: "active", width: 150 },
@@ -98,7 +111,7 @@ class UserListScreen extends Component {
                 renderCell: () => {
                     return (
                         <Button variant="contained" style={{ backgroundColor: green["A700"] }}  >
-                            OPEN
+                            Active
                         </Button>
                     );
                 }
@@ -108,8 +121,8 @@ class UserListScreen extends Component {
                 description: 'This column has a value getter and is not sortable.',
                 sortable: false,
                 width: 160,
-                valueGetter: (params) =>
-                    `${params.getValue(params.id, 'username') || ''}  `,
+                valueGetter: (params) => `${params.getValue(params.id, 'username') || ''}  `,
+
             },
 
         ];
@@ -145,12 +158,22 @@ class UserListScreen extends Component {
 
     }
 
-    render() {
-        return (
 
-            <div className="flex items-center justify-center mt-4">
-                {/* <button onClick={() => this.getUserData()}>aaaaa</button> */}
-                <FormCard background="#eeeeee" className="p-2  rounded-md ">   {this.renderShop()}  </FormCard>
+    render() {
+        const { isPopup, isLoading } = this.state
+        return (isLoading ?
+            <div className="flex flex-col w-full h-full bg-opacity-20 transition-opacity justify-center items-center">
+                <div className="flex absolute">
+                    <img
+                        src={cat}
+                        alt="cat"
+                        className="flex justify-center items-center m-auto"
+                    />
+                </div>
+            </div> :
+
+            <div className="flex w-full h-full items-center justify-center mt-4  ">
+                <FormCard background="#eeeeee" className="p-2  rounded-md">   {this.renderUser()}  </FormCard>
 
 
             </div>

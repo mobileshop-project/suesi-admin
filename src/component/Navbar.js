@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
  
 import { blue } from "@mui/material/colors";
 import Alert from "../service/Alert";
+import Authentication from "../service/Authentication";
  
 
 
@@ -27,7 +28,13 @@ class Navbar extends Component {
 
     }
 
+    componentDidMount(){
+    
+    }
 
+
+
+ 
     logout() {
         Alert.confirmLogout().then(() => {
             this.setState({
@@ -37,8 +44,9 @@ class Navbar extends Component {
                 navbarOpen: false,
                 showSeller: false,
             });
-
+            this.props.history.push("/signin"); 
         });
+      
     }
 
 
@@ -60,7 +68,7 @@ class Navbar extends Component {
                     <Typography className="cursor-default" variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Admin Manager
                     </Typography>
-                    <Button onClick={this.logout.bind(this)} color="inherit">Bew</Button>
+                    {/* <Button onClick={this.logout.bind(this)} color="inherit">Bew</Button> */}
    
                     <Button onClick={this.logout.bind(this)} color="inherit">Logout</Button>
                 </Toolbar>

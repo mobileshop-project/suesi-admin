@@ -1,4 +1,4 @@
- 
+
 import api from "./api";
 import tokenService from "./TokenService";
 import TokenService from "./TokenService";
@@ -26,8 +26,9 @@ class Authentication {
   }
 
   getDecodeUser() {
-    let user = tokenService.getUser()
-    console.log(user + "tesssssss")
+    let token = tokenService.getUser()
+    let user = jwt_decode(token.access_token);
+       return user
   }
 
   getCurrentUser() {
@@ -42,6 +43,7 @@ class Authentication {
     const token = JSON.parse(localStorage.getItem("user")).refresh_token
     return api.get('token/refresh', { headers: { Authorization: `INK${token}` } })
   }
+
   deCodeJwt(token) {
     if (!token) {
       return null;

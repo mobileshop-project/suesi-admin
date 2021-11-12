@@ -4,11 +4,11 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router';
 import FormCard from "../component/FormCard"
 import DataService from '../service/DataService';
-import EditIcon from "@material-ui/icons/Edit";
 import { purple, red, green } from '@mui/material/colors';
-import { createTheme } from '@mui/material/styles';
-import Swal from 'sweetalert2';
-
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import cat from "../assets/images/nyan-cat.gif";
+import ApprovalService from '../service/ApprovalService';
+import Authentication from '../service/Authentication';
 
 class ApprovalScreen extends Component {
     constructor(props) {
@@ -19,14 +19,32 @@ class ApprovalScreen extends Component {
             isPopup: false,
             imageUrl: "https://www.tarkom-projects.com/api/v1/image/",
             idCardImg: null,
-            selfieImg: null
+            selfieImg: null,
+            isLoading: true,
+            buyerCode: "",
+            considerResult: "",
+            remark: "",
+            adminCode: "",
+            buyerCode: ""
         }
 
     }
 
     async componentDidMount() {
+        await this.getUser()
         await this.getShopData()
-        await this.test()
+
+
+    }
+
+
+    getUser() {
+        const user = Authentication.getDecodeUser()
+        console.log(user)
+        this.setState({
+            adminCode: user.accountCode
+
+        })
 
     }
 
@@ -35,7 +53,7 @@ class ApprovalScreen extends Component {
             console.log(res.data)
             console.log("----------------")
             await this.ReplaceId(res.data)
-            await this.test2()
+
         })
     }
 
@@ -44,94 +62,63 @@ class ApprovalScreen extends Component {
         let newJson = JSON.parse(JSON.stringify(json).split('"requestCode":').join('"id":'));
         console.log(newJson)
         this.setState({
-            dataWithReplaceID: newJson
-        })
-    }
-
-
-    renderImage = () => {
-        return (<div>555555555555555555555555</div>)
-    }
-
-
-    test() {
-        let a = [{ username: "bew", roles: [{ role: "Buyer" }, { role: "Seller" }] },
-        { username: "wave", roles: [{ role: "Buyer" }, { role: "Seller" }] }]
-        // [[1, 2], [3, 4], [5, 6]]
-
-
-        a.map(item => {
-            return item.roles.map((sub) => {
-                console.log(sub.role)
-            });
-
+            dataWithReplaceID: newJson,
+            isLoading: false
         })
 
     }
 
-    test2() {
-        const imageUrl = "https://www.tarkom-projects.com/api/v1/image/"
-        const { dataWithReplaceID } = this.state
-        console.log(dataWithReplaceID)
-        dataWithReplaceID.map((list1) => {
-            return list1.evidenceImageList.map(list2 => {
-                return <div> <img scr={imageUrl + list2} />   </div>
-            })
-        })
 
 
-    }
-
-
-
-
-
-    Approve() {
-
-        const allImage = []
-        //  const data = this.state.dataWithReplaceID
-        const data = [{ id: 1, requestStatus: "PENDING", username: "beww", pic: [{ img: "https://static.thairath.co.th/media/dFQROr7oWzulq5Fa4u0YhLKiDxsd9SJzhOgnJBrNJdI8TIgXYL2SYUqzV3k4hxCfnH5.jpg" }, { img: "https://s.isanook.com/wo/0/ud/4/20927/d21.jpg" }] },
-        { id: 2, requestStatus: "PENDING", username: "wave", pic: [{ img: "https://static.thairath.co.th/media/dFQROr7oWzulq5Fa4u0YhLKiDxsd9SJzhOgnJBrNJdI8TIgXYL2SYUqzV3k4hxCfnH5.jpg" }, { img: "https://s.isanook.com/wo/0/ud/4/20927/d21.jpg" }] },]
-
-
-        // data.map(item => {
-        //     return item.pic.map((sub) => {
-        //         console.log(sub.img)
-
-        //     });
-
-        // })
-
-
-
-    }
-
-
-
-
-    handleDecision() {
+    async handleDecision() {
         this.setState({
             isPopup: true
         })
-        console.log(this.state.isPopup)
+        console.log(this.state.buyerCode)
+
     }
 
 
-    ApprovePopup(img1, img2) {
+    handleApprovalResponse() {
 
+        const { buyerCode, considerResult, remark, adminCode } = this.state
+        const data = {
+            buyerCode: buyerCode,
+            considerResult: considerResult,
+            remark: remark,
+            adminCode: adminCode,
+        }
+        Authentication.sendApprove(data)
+    }
+
+
+
+    ApprovePopup(img1, img2) {
+        const { imageUrl, idCardImg, selfieImg } = this.state
         const { dataWithReplaceID } = this.state
 
-        return <div className="absolute flex    bg-white z-10 rounded-md">
-            <div>
-
-                <img className="w-7/12" src={img1} />
-
+        return <div className="absolute flex flex-col bg-gray-300 z-10 rounded-md w-3/4 lg:h-5/6 h-auto   ">
+            <div className="flex justify-end  ">
+                <Button style={{ backgroundColor: red["A700"] }} variant="contained" onClick={() => this.setState({ isPopup: false })}> <HighlightOffIcon /></Button>
             </div>
-            <div>
-                <img src={img2} />
-                <img src="https://s.isanook.com/wo/0/ud/4/20927/d21.jpg" />
+
+            <div className=" flex lg:flex-row flex-col   justify-center items-center h-full lg:space-x-2  space-y-4 lg:space-y-0">
+                <div className="bg-red-400">
+                    <p className="font-PoppinsMedium ">Identification card</p>
+                    <img className="border-4  rounded-md  md:h-96 md:w-96 w-64 h-64 " src={imageUrl + idCardImg} />
+                </div>
+                <div className="bg-red-400">
+                    <p className="  font-PoppinsMedium">Selfie with an identification card </p>
+                    <img className="border-4  rounded-md  md:h-96 md:w-96 w-64 h-64  " src={imageUrl + selfieImg} />
+                </div>
             </div>
-        </div>
+
+
+            <div className="flex justify-center space-x-10 py-4">
+                <Button style={{ backgroundColor: green["A700"] }} variant="contained" onClick={() => this.setState({ isPopup: false })}> Accept</Button>
+                <Button style={{ backgroundColor: red["500"] }} variant="contained" onClick={() => this.setState({ isPopup: false })}> Reject</Button>
+            </div>
+        </div >
     }
 
 
@@ -155,8 +142,9 @@ class ApprovalScreen extends Component {
 
                     const onClick = (e) => {
                         console.log(params.id)
-                        let x =
-                            e.stopPropagation(); // don't select this row after clicking
+
+                        let x = e.stopPropagation(); // don't select this row after clicking
+
 
                         const api: GridApi = this.state.dataWithReplaceID;
                         const thisRow: Record<string, GridCellValue> = {};
@@ -165,18 +153,12 @@ class ApprovalScreen extends Component {
                             return this.setState({
                                 idCardImg: image.evidenceImageList[0],
                                 selfieImg: image.evidenceImageList[1],
+                                buyerCode: params.id
                             })
 
                         })
-
-
-                    };
-
-
-
-
-
-
+                        this.handleDecision()
+                    }
 
                     return <Button onClick={onClick} variant="contained" style={{ backgroundColor: green["A700"] }}  >
                         Decision
@@ -203,11 +185,19 @@ class ApprovalScreen extends Component {
     }
 
     render() {
-        const { isPopup } = this.state
-        return (
+        const { isPopup, isLoading } = this.state
+        return (isLoading ?
+            <div className="flex flex-col w-full h-full bg-opacity-20 transition-opacity justify-center items-center">
+                <div className="flex absolute">
+                    <img
+                        src={cat}
+                        alt="cat"
+                        className="flex justify-center items-center m-auto"
+                    />
+                </div>
+            </div> :
 
             <div className="flex w-full h-full items-center justify-center mt-4  ">
-
                 <FormCard background="#eeeeee" className="p-2  rounded-md">   {this.renderApprove()}  </FormCard>
                 {isPopup ? this.ApprovePopup() : null}
 

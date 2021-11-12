@@ -7,19 +7,22 @@ import DataService from '../service/DataService';
 import EditIcon from "@material-ui/icons/Edit";
 import { purple, red, green } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
-
+import cat from "../assets/images/nyan-cat.gif";
+import Authentication from '../service/Authentication';
 
 class ShopList extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            DataWithReplaceID: null
+            DataWithReplaceID: null,
+            isLoading: true
         }
 
     }
 
     async componentDidMount() {
+        await this.getUser()
         await this.getShopData()
 
     }
@@ -31,12 +34,23 @@ class ShopList extends Component {
         })
     }
 
+    
+    getUser() {
+        const user = Authentication.getDecodeUser()
+        console.log(user)
+        this.setState({
+            accountCode: user.accountCode
+        })
+       
+    }
+
     ReplaceId(jsonObj) {
         let json = jsonObj
         let newJson = JSON.parse(JSON.stringify(json).split('"shopCode":').join('"id":'));
         console.log(newJson)
         this.setState({
-            DataWithReplaceID: newJson
+            DataWithReplaceID: newJson,
+            isLoading: false
         })
     }
 
@@ -45,10 +59,10 @@ class ShopList extends Component {
 
 
         const columns: GridColDef[] = [
-            { field: "id", headerName: "shop id", width: 80 },
+            { field: "id", headerName: "Shop id", width: 80 },
             { field: "shopName", headerName: "Shop name", width: 150 },
             { field: "shopType", headerName: "Shop type", width: 150 },
-            { field: "col3", headerName: "Status", width: 150 },
+            { field: "shopStatus", headerName: "Status", width: 150 },
             {
                 field: "edit",
                 headerName: "Action",
@@ -57,9 +71,12 @@ class ShopList extends Component {
                 disableClickEventBubbling: true,
                 renderCell: () => {
                     return (
-                        <Button variant="contained" style={{ backgroundColor: green["A700"] }}  >
-                            OPEN
-                        </Button>
+                        <div>
+                            <Button variant="contained" style={{ backgroundColor: green["A700"] }}  >
+                                OPEN
+                            </Button>
+                        </div>
+
                     );
                 }
             }
@@ -81,13 +98,23 @@ class ShopList extends Component {
         </div>
     }
 
+
     render() {
-        return (
+        const { isPopup, isLoading } = this.state
+        return (isLoading ?
+            <div className="flex flex-col w-full h-full bg-opacity-20 transition-opacity justify-center items-center">
+                <div className="flex absolute">
+                    <img
+                        src={cat}
+                        alt="cat"
+                        className="flex justify-center items-center m-auto"
+                    />
+                </div>
+            </div> :
 
-            <div className="flex items-center justify-center mt-4">
-                {/* <button onClick={() => this.getShopData()}>aaaaa</button> */}
+            <div className="flex w-full h-full items-center justify-center mt-4  ">
                 <FormCard background="#eeeeee" className="p-2  rounded-md">   {this.renderShop()}  </FormCard>
-
+            
 
             </div>
         )
