@@ -79,20 +79,22 @@ class ApprovalScreen extends Component {
     }
 
 
-    handleApprovalResponse() {
-
+    handleApprove() {
+        this.setState({ isPopup: false })
         const { buyerCode, considerResult, remark, adminCode } = this.state
         const data = {
             buyerCode: buyerCode,
-            considerResult: considerResult,
+            considerResult: "APPROVE",
             remark: remark,
             adminCode: adminCode,
         }
-        Authentication.sendApprove(data)
+        // Authentication.sendApprove(data)
     }
 
 
+    handleReject() {
 
+    }
     ApprovePopup(img1, img2) {
         const { imageUrl, idCardImg, selfieImg } = this.state
         const { dataWithReplaceID } = this.state
@@ -115,7 +117,7 @@ class ApprovalScreen extends Component {
 
 
             <div className="flex justify-center space-x-10 py-4">
-                <Button style={{ backgroundColor: green["A700"] }} variant="contained" onClick={() => this.setState({ isPopup: false })}> Accept</Button>
+                <Button style={{ backgroundColor: green["A700"] }} variant="contained" onClick={() => this.handleApprove()}> Accept</Button>
                 <Button style={{ backgroundColor: red["500"] }} variant="contained" onClick={() => this.setState({ isPopup: false })}> Reject</Button>
             </div>
         </div >
