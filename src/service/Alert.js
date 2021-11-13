@@ -34,15 +34,15 @@ class Alert {
     }
 
     getLoginAlertFail() {
-		return MySwal.fire({
-			icon: "error",
-			title: "Oops...",
-			text: "Username or password does not match ",
-			footer: '<a href="">Reset password?</a>',
+        return MySwal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Username or password does not match ",
+            footer: '<a href="">Reset password?</a>',
 
-		});
-	}
-    
+        });
+    }
+
     getGeneralAlertMsg(icon, titleMsg, textMsg = "", timer = 1500) {
         return MySwal.fire({
             icon: `${icon}`,
@@ -52,5 +52,10 @@ class Alert {
             timer: ` ${timer}`,
         });
     }
+
+
+ 
+
+
 }
 export default new Alert();
