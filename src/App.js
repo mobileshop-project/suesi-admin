@@ -16,7 +16,7 @@ import Navbar from "./component/Navbar";
 import ApprovalScreen from "./screen/ApprovalScreen";
 import ShopListScreen from "./screen/ShopListScreen";
 import UserListScreen from "./screen/UserListScreen";
-
+import createOfficialAccount from "./screen/CreateOfficialAccountScreen";
 class App extends Component {
   render() {
     return (
@@ -27,7 +27,8 @@ class App extends Component {
             <Route path={"/home"} component={Home}>
               <Redirect to="/approval" />
             </Route>
-            <Route path={["/approval", "/shopList", "/userList"]} component={Home} />
+            <Route path={["/approval", "/shopList", "/userList", "/createOfficialAccount"]} component={Home} />
+
             {/* <Route path="/approval" component={ApprovalScreen} />
             <Route path="/shopList" component={ShopListScreen} />
             <Route path="/userList" component={UserListScreen} /> */}

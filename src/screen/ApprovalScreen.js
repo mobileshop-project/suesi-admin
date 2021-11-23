@@ -1,7 +1,7 @@
 import { DataGrid } from '@mui/x-data-grid';
 import { Button } from '@mui/material';
 import React, { Component } from 'react'
-import { withRouter } from 'react-router';
+import { withRouter,Redirect } from 'react-router';
 import FormCard from "../component/FormCard"
 import DataService from '../service/DataService';
 import { purple, red, green } from '@mui/material/colors';
@@ -27,7 +27,8 @@ class ApprovalScreen extends Component {
             considerResult: "",
             remark: "",
             adminCode: "",
-            buyerCode: ""
+            buyerCode: "",
+            isRedirect: false
         }
     }
 
@@ -38,11 +39,15 @@ class ApprovalScreen extends Component {
 
 
     getUser() {
-        const user = Authentication.getDecodeUser()
-        console.log(user)
-        this.setState({
-            adminCode: user.accountCode
-        })
+        if (Authentication.getDecodeUser() != null) {
+            const user = Authentication.getDecodeUser()
+            console.log(user)
+            this.setState({
+                accountCode: user.accountCode
+            })
+        } else {
+            this.setState({ isRedirect: true })
+        }
     }
 
     getShopData() {
@@ -179,12 +184,10 @@ class ApprovalScreen extends Component {
                 sortable: false,
                 renderCell: (params) => {
 
+
                     const onClick = (e) => {
                         console.log(params.id)
-
                         e.stopPropagation(); // don't select this row after clicking
-
-
                         const api: GridApi = this.state.dataWithReplaceID;
                         const thisRow: Record<string, GridCellValue> = {};
 
@@ -197,6 +200,8 @@ class ApprovalScreen extends Component {
                         })
                         this.handleDecision()
                     }
+
+
                     return <Button onClick={onClick} variant="contained" style={{ backgroundColor: green["A700"] }}  >
                         Decision
                     </Button>
@@ -220,22 +225,27 @@ class ApprovalScreen extends Component {
     }
 
     render() {
-        const { isPopup, isLoading } = this.state
-        return (isLoading ?
-            <div className="flex flex-col w-full h-full bg-opacity-20 transition-opacity justify-center items-center">
-                <div className="flex absolute">
-                    <img
-                        src={cat}
-                        alt="cat"
-                        className="flex justify-center items-center m-auto"
-                    />
+        const { isPopup, isLoading, isRedirect } = this.state
+        if (isRedirect) {
+            return <Redirect to="/signin" />;
+        } else {
+
+            return (isLoading ?
+                <div className="flex flex-col w-full h-full bg-opacity-20 transition-opacity justify-center items-center">
+                    <div className="flex absolute">
+                        <img
+                            src={cat}
+                            alt="cat"
+                            className="flex justify-center items-center m-auto"
+                        />
+                    </div>
+                </div> :
+                <div className="flex w-full h-full items-center justify-center mt-4  ">
+                    <FormCard background="#eeeeee" className="p-2  rounded-md">   {this.renderApprove()}  </FormCard>
+                    {isPopup ? this.ApprovePopup() : null}
                 </div>
-            </div> :
-            <div className="flex w-full h-full items-center justify-center mt-4  ">
-                <FormCard background="#eeeeee" className="p-2  rounded-md">   {this.renderApprove()}  </FormCard>
-                {isPopup ? this.ApprovePopup() : null}
-            </div>
-        )
+            )
+        }
     }
 }
 export default withRouter(ApprovalScreen)

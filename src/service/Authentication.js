@@ -27,8 +27,12 @@ class Authentication {
 
   getDecodeUser() {
     let token = tokenService.getUser()
-    let user = jwt_decode(token.access_token);
-       return user
+    if (token!=null) {
+      let user = jwt_decode(token.access_token);
+      return user
+    }else {
+      return null
+    }
   }
 
   getCurrentUser() {

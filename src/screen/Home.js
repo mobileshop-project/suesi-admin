@@ -6,6 +6,7 @@ import ApprovalScreen from "./ApprovalScreen";
 import ShopListScreen from "./ShopListScreen";
 import UserListScreen from "./UserListScreen";
 import GridForm from "../component/GridForm"
+import CreateOfficialAccountScreen from "./CreateOfficialAccountScreen"
 class Home extends Component {
   constructor(props) {
     super(props)
@@ -37,6 +38,7 @@ class Home extends Component {
           <Route path={"/approval"} component={ApprovalScreen} />
           <Route path={"/shopList"} component={ShopListScreen} />
           <Route path={"/userList"} component={UserListScreen} />
+          <Route path={"/createOfficialAccount"} component={CreateOfficialAccountScreen} />
         </Switch>
       
       </div>

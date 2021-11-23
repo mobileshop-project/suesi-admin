@@ -1,14 +1,13 @@
 import { DataGrid } from '@mui/x-data-grid';
-import { Button } from '@mui/material';
+
 import React, { Component } from 'react'
-import { withRouter } from 'react-router';
+import { withRouter,Redirect } from 'react-router-dom';
 import FormCard from "../component/FormCard"
 import DataService from '../service/DataService';
-import EditIcon from "@material-ui/icons/Edit";
-import { purple, red, green } from '@mui/material/colors';
-import { createTheme } from '@mui/material/styles';
+
 import cat from "../assets/images/nyan-cat.gif";
 import Authentication from '../service/Authentication';
+
 
 class ShopList extends Component {
     constructor(props) {
@@ -16,7 +15,8 @@ class ShopList extends Component {
 
         this.state = {
             DataWithReplaceID: null,
-            isLoading: true
+            isLoading: true,
+            isRedirect: false
         }
 
     }
@@ -34,14 +34,17 @@ class ShopList extends Component {
         })
     }
 
-    
+
     getUser() {
-        const user = Authentication.getDecodeUser()
-        console.log(user)
-        this.setState({
-            accountCode: user.accountCode
-        })
-       
+        if (Authentication.getDecodeUser() != null) {
+            const user = Authentication.getDecodeUser()
+            console.log(user)
+            this.setState({
+                accountCode: user.accountCode
+            })
+        } else {
+            this.setState({ isRedirect: true })
+        }
     }
 
     ReplaceId(jsonObj) {
@@ -63,23 +66,50 @@ class ShopList extends Component {
             { field: "shopName", headerName: "Shop name", width: 150 },
             { field: "shopType", headerName: "Shop type", width: 150 },
             { field: "shopStatus", headerName: "Status", width: 150 },
-            {
-                field: "edit",
-                headerName: "Action",
-                sortable: false,
-                width: 130,
-                disableClickEventBubbling: true,
-                renderCell: () => {
-                    return (
-                        <div>
-                            <Button variant="contained" style={{ backgroundColor: green["A700"] }}  >
-                                OPEN
-                            </Button>
-                        </div>
 
-                    );
-                }
-            }
+            // {
+            //     field: "edit",
+            //     headerName: "Action",
+            //     sortable: false,
+            //     width: 130,
+            //     disableClickEventBubbling: true,
+            //     renderCell: (params) => {
+            //         const api: GridApi = this.state.dataWithReplaceID;
+
+
+
+
+            //         const onClick = (e) => {
+            //             console.log(params.id)
+            //             e.stopPropagation(); // don't select this row after clicking
+
+
+            //             const thisRow: Record<string, GridCellValue> = {};
+
+            //             // api.filter(req => req.id === params.id).map(data => {
+            //             //     return this.setState({
+            //             //         idCardImg: data.evidenceImageList[0],
+            //             //         selfieImg: data.evidenceImageList[1],
+            //             //         buyerCode: data.accountCode
+            //             //     })
+            //             // })
+
+            //         }
+
+
+
+            //         return (
+            //             <div>
+            //                 <Button variant="contained" style={{ backgroundColor: green["A700"] }}  >
+            //                     <p>
+            //                         OPEN/CLOSE
+            //                     </p>
+            //                 </Button>
+            //             </div>
+
+            //         );
+            //     }
+            // }
 
         ];
 
@@ -100,24 +130,28 @@ class ShopList extends Component {
 
 
     render() {
-        const { isPopup, isLoading } = this.state
-        return (isLoading ?
-            <div className="flex flex-col w-full h-full bg-opacity-20 transition-opacity justify-center items-center">
-                <div className="flex absolute">
-                    <img
-                        src={cat}
-                        alt="cat"
-                        className="flex justify-center items-center m-auto"
-                    />
+        const { isLoading, isRedirect } = this.state
+        if (isRedirect) {
+            return <Redirect to="/signin" />;
+        } else {
+            return (isLoading ?
+                <div className="flex flex-col w-full h-full bg-opacity-20 transition-opacity justify-center items-center">
+                    <div className="flex absolute">
+                        <img
+                            src={cat}
+                            alt="cat"
+                            className="flex justify-center items-center m-auto"
+                        />
+                    </div>
+                </div> :
+
+                <div className="flex w-full h-full items-center justify-center mt-4 ">
+                    <FormCard background="#eeeeee" className="p-2  rounded-md">   {this.renderShop()}  </FormCard>
+
+
                 </div>
-            </div> :
-
-            <div className="flex w-full h-full items-center justify-center mt-4  ">
-                <FormCard background="#eeeeee" className="p-2  rounded-md">   {this.renderShop()}  </FormCard>
-            
-
-            </div>
-        )
+            )
+        }
     }
 }
 export default withRouter(ShopList);

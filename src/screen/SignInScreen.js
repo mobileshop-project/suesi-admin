@@ -23,6 +23,16 @@ class SignInScreen extends Component {
   }
 
 
+  componentDidMount() {
+    this.getUser()
+  }
+
+  getUser() {
+    if (Authentication.getDecodeUser() != null) {
+      this.setState({ isRedirect: true })
+    }
+  }
+
   handleSubmit(event) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -46,23 +56,6 @@ class SignInScreen extends Component {
     });
   }
 
-  // Copyright(props) {
-  //   return (
-  //     <Typography
-  //       variant="body2"
-  //       color="text.secondary"
-  //       align="center"
-  //       {...props}
-  //     >
-  //       {"Copyright © "}
-  //       <Link color="inherit" href="https://mui.com/">
-  //         2021 ยังไม่คิด.COM. All Rights Reserved.
-  //       </Link>{" "}
-  //       {new Date().getFullYear()}
-  //       {"."}
-  //     </Typography>
-  //   );
-  // }
 
   renderSignForm() {
     return (
@@ -78,9 +71,7 @@ class SignInScreen extends Component {
             }}
           >
             <img src={logo} className="w-auto h-36 p-2" alt="" />
-            {/* <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-              <LockOutlinedIcon />
-            </Avatar> */}
+
             <Typography component="h1" variant="h5">
               Sign in with suesi admin
             </Typography>
@@ -119,21 +110,10 @@ class SignInScreen extends Component {
               >
                 Sign In
               </Button>
-              {/* <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid> */}
+
             </Box>
           </Box>
-          {/* <this.Copyright sx={{ mt: 8, mb: 4 }} /> */}
+
         </Container>
 
       </ThemeProvider>
@@ -142,7 +122,7 @@ class SignInScreen extends Component {
 
   render() {
     const { isRedirect } = this.state;
-    return (isRedirect ? <Redirect to="/home" /> : <div className="  ">{this.renderSignForm()}</div>)
+    return (isRedirect ? <Redirect to="/home" /> : <div >{this.renderSignForm()}</div>)
 
   }
 }
