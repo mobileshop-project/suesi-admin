@@ -18,7 +18,7 @@ jobs:
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - run: |
           docker build . -t suesi.azurecr.io/adminmobileshop:${{ github.sha }}
-          docker tag suesi.azurecr.io/mobileshop:${{ github.sha }} suesi.azurecr.io/adminmobileshop:sit
+          docker tag suesi.azurecr.io/adminmobileshop:${{ github.sha }} suesi.azurecr.io/adminmobileshop:sit
           docker push suesi.azurecr.io/adminmobileshop:sit
   deploy:
     needs:
