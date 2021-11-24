@@ -11,7 +11,10 @@ import Authentication from "../service/Authentication";
 import { blue } from "@mui/material/colors";
 import logo from "../assets/images/suesi_logo_2.png"
 import Alert from "../service/Alert";
+import {signin} from "../actions/auth/auth";
+import {connect} from "react-redux";
 const theme = createTheme();
+
 class SignInScreen extends Component {
   constructor(props) {
     super(props);
@@ -21,7 +24,6 @@ class SignInScreen extends Component {
       password: "",
     };
   }
-
 
   componentDidMount() {
     this.getUser()
@@ -35,27 +37,32 @@ class SignInScreen extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    const { dispatch } = this.props
     const data = new FormData(event.currentTarget);
     let username = data.get("username");
     let password = data.get("password");
-
-    Authentication.signIn(username, password).then(async (res) => {
-      let user = Authentication.deCodeJwt(res)
-      console.log(user.roles[0])
-      if (user.roles[0] === "ADMIN") {
-        await Alert.getLoginAlert(); this.setState({
-          isRedirect: await true
-        })
-      } else {
+    dispatch(signin(username, password))
+      .then(async () => {
+        await this.setState({isLoading: false})
+        await Alert.getLoginAlert()
+        await this.setState({isRedirect: true})
+      },() =>{
         Alert.getLoginAlertFail()
-      }
-
-
-    }, (error) => {
-      Alert.getLoginAlertFail()
-    });
+        this.setState({isLoading: false})
+      })
+    // Authentication.signIn(username, password).then(async (res) => {
+    //   let user = Authentication.deCodeJwt(res)
+    //   if (user.roles[0] === "ADMIN") {
+    //     await Alert.getLoginAlert(); this.setState({
+    //       isRedirect: await true
+    //     })
+    //   } else {
+    //     Alert.getLoginAlertFail()
+    //   }
+    // },(error) => {
+    //   Alert.getLoginAlertFail()
+    // });
   }
-
 
   renderSignForm() {
     return (
@@ -73,8 +80,9 @@ class SignInScreen extends Component {
             <img src={logo} className="w-auto h-36 p-2" alt="" />
 
             <Typography component="h1" variant="h5">
-              Sign in with suesi admin
+              <p className="font-bold">Sign in with suesi for Admin</p>
             </Typography>
+
             <Box
               component="form"
               onSubmit={this.handleSubmit.bind(this)}
@@ -110,12 +118,9 @@ class SignInScreen extends Component {
               >
                 Sign In
               </Button>
-
             </Box>
           </Box>
-
         </Container>
-
       </ThemeProvider>
     );
   }
@@ -126,4 +131,14 @@ class SignInScreen extends Component {
 
   }
 }
-export default withRouter(SignInScreen);
+
+function mapStateToProps(state) {
+  const {isLoggedIn} = state.auth;
+  const {message} = state.message;
+  return {
+    isLoggedIn,
+    message,
+  };
+}
+
+export default withRouter(connect(mapStateToProps)(SignInScreen))

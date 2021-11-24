@@ -1,46 +1,24 @@
 import React, { Component } from "react";
-import { Link, withRouter, Route, Switch, Redirect } from "react-router-dom";
-import Navbar from "../component/Navbar";
-import Menu from "../component/Menu"
-import ApprovalScreen from "./ApprovalScreen";
-import ShopListScreen from "./ShopListScreen";
-import UserListScreen from "./UserListScreen";
-import GridForm from "../component/GridForm"
-import CreateOfficialAccountScreen from "./CreateOfficialAccountScreen"
+import {withRouter} from "react-router-dom";
+import SideMenuAndData from "../component/SideMenuAndData";
+import AuthService from "../service/AuthService";
 class Home extends Component {
-  constructor(props) {
-    super(props)
 
-    this.state = {
-      value: 0,
-      setValue: 0
+  componentDidMount() {
+    this.checkUser();
+  }
+
+  checkUser(){
+    const user = AuthService.deCodeJwt(AuthService.getCurrentUser())
+    if(!user){
+      this.props.history.push("signin")
     }
   }
 
-
-
-  renderMenu() {
-    const { value, setValue } = this.state
-    return (
-      <div  >
-        <Menu />
-      </div>)
-  }
-
   render() {
-
-
     return (
       <div>
-        <Navbar />
-        {this.renderMenu()}
-        <Switch>
-          <Route path={"/approval"} component={ApprovalScreen} />
-          <Route path={"/shopList"} component={ShopListScreen} />
-          <Route path={"/userList"} component={UserListScreen} />
-          <Route path={"/createOfficialAccount"} component={CreateOfficialAccountScreen} />
-        </Switch>
-      
+        <SideMenuAndData/>
       </div>
     );
   }

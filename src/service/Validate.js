@@ -11,19 +11,6 @@ class Validate {
         }
     }
 
-    getGeneralValidate(text) {
-        const textCheck = /^(?!\s*$).+/;
-
-        if (text.match(" ") || "") {
-            return false;
-        } else if (text.match(textCheck)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
     getValidateUsername(username) {
         const userCheck = /^[a-zA-Z0-9._-]{3,15}$/;
         if (username.match(" ") || "") {

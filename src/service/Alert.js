@@ -2,10 +2,7 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import Authentication from "./Authentication";
 const MySwal = withReactContent(Swal);
-
-
 class Alert {
-
     confirmLogout() {
         return new Promise((resolve) => {
             Swal.fire({
@@ -32,7 +29,6 @@ class Alert {
             timer: 1000,
         });
     }
-
     getLoginAlertFail() {
         return MySwal.fire({
             icon: "error",
@@ -42,7 +38,6 @@ class Alert {
 
         });
     }
-
     getGeneralAlertMsg(icon, titleMsg, textMsg = "", timer = 1500) {
         return MySwal.fire({
             icon: `${icon}`,
@@ -52,10 +47,5 @@ class Alert {
             timer: ` ${timer}`,
         });
     }
-
-
- 
-
-
 }
 export default new Alert();

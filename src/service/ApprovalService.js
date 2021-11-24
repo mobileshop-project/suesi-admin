@@ -1,5 +1,4 @@
 import api from "./api";
-import React, { Component } from 'react'
 
 class ApprovalService {
     sendApprove(data) {
