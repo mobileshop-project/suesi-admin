@@ -1,0 +1,68 @@
+name: SIT CICD
+
+on:
+  pull_request:
+    branches: [ sit ]
+  push:
+    branches: [ sit ]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: azure/docker-login@v1
+        with:
+          login-server: suesi.azurecr.io
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - run: |
+          docker build . -t suesi.azurecr.io/adminmobileshop:${{ github.sha }}
+          docker tag suesi.azurecr.io/mobileshop:${{ github.sha }} suesi.azurecr.io/adminmobileshop:sit
+          docker push suesi.azurecr.io/adminmobileshop:sit
+  deploy:
+    needs:
+      - build
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: 'The project Suesi Mobile is deploy.'
+      - uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOSTNAME }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATEKEY }}
+          port: ${{ secrets.SERVERPORT }}
+          script: |
+            cd adminweb/
+            sudo docker-compose down && sudo docker-compose pull
+            sudo docker-compose up -d
+            sudo docker image prune -af
+  health-check:
+    needs:
+      - build
+      - deploy
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Health-Check
+        run: sleep 3 && curl -s -o /dev/null -I -w "%{http_code}" https://www.tarkom-projects.com/admin | grep "200"
+
+      - uses: sarisia/actions-status-discord@v1
+        if: success()
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          title: "Deploy Success"
+          image: "https://www.tarkom-projects.com/api/v1/image/hell-yeah.png"
+
+      - uses: sarisia/actions-status-discord@v1
+        if: failure()
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          image: "https://www.tarkom-projects.com/api/v1/image/fuck-up.png"
+          title: Deploy Failure
+          color: "0xFF0040"
+          status: Failure
