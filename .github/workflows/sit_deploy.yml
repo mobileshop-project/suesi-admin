@@ -38,7 +38,7 @@ jobs:
           key: ${{ secrets.PRIVATEKEY }}
           port: ${{ secrets.SERVERPORT }}
           script: |
-            az acr login -n suesi.azurecr.io
+            az acr login -n suesi
             cd adminweb/
             docker-compose down
             docker-compose pull
