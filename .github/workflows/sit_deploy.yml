@@ -1,4 +1,4 @@
-name: SIT CICD
+name: SIT CICD ADMIN
 
 on:
   pull_request:
