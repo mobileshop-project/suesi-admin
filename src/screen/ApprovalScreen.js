@@ -37,10 +37,8 @@ class ApprovalScreen extends Component {
   getUser() {
     if (Authentication.getDecodeUser() != null) {
       const user = Authentication.getDecodeUser()
-      console.log(user)
       this.setState({
-        accountCode: user.accountCode,
-        adminCode:user.accountCode
+        adminCode: user.accountCode
       })
     } else {
       this.setState({isRedirect: true})
@@ -49,8 +47,6 @@ class ApprovalScreen extends Component {
 
   getShopData() {
     DataService.fetchApproveData().then(async (res) => {
-      console.log(res.data)
-      console.log("----------------")
       await this.ReplaceId(res.data)
     })
   }
@@ -58,7 +54,6 @@ class ApprovalScreen extends Component {
   ReplaceId(jsonObj) {
     let json = jsonObj
     let newJson = JSON.parse(JSON.stringify(json).split('"requestCode":').join('"id":'));
-    console.log(newJson)
     this.setState({
       dataWithReplaceID: newJson,
       isLoading: false
@@ -83,6 +78,7 @@ class ApprovalScreen extends Component {
         remark: remark,
         adminCode: adminCode,
       }
+      console.log(data)
       ApprovalService.sendApprove(data)
     } else if (Result === "REJECT") {
       await this.getRejectAlert()
@@ -92,6 +88,7 @@ class ApprovalScreen extends Component {
         remark: this.state.remark, //receive new state
         adminCode: adminCode,
       }
+      console.log(data)
       ApprovalService.sendApprove(data)
     }
   }
