@@ -78,8 +78,9 @@ class ApprovalScreen extends Component {
         remark: remark,
         adminCode: adminCode,
       }
-      console.log(data)
-      ApprovalService.sendApprove(data)
+      ApprovalService.sendApprove(data).then( res => {
+        window.location.reload();
+      })
     } else if (Result === "REJECT") {
       await this.getRejectAlert()
       const data = {
@@ -88,8 +89,9 @@ class ApprovalScreen extends Component {
         remark: this.state.remark, //receive new state
         adminCode: adminCode,
       }
-      console.log(data)
-      ApprovalService.sendApprove(data)
+      ApprovalService.sendApprove(data).then( res => {
+        window.location.reload();
+      })
     }
   }
 

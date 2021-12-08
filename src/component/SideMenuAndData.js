@@ -49,9 +49,9 @@ class SideMenuAndData extends Component {
         <div className="flex w-10/12 h-full bg-gray-50">
           <div className="flex w-10/12 h-full mx-auto">
             <div className="flex w-full h-5/6 items-center justify-center my-auto">
-              {isShow ? <div className="flex w-full h-full items-center justify-center">
-                <p className="font-PoppinsMedium text-6xl">Wellcome to Suesi-Mobile Admin</p>
-              </div> : null}
+              {/*{isShow ? <div className="flex w-full h-full items-center justify-center">*/}
+              {/*  <p className="font-PoppinsMedium text-6xl">Wellcome to Suesi-Mobile Admin</p>*/}
+              {/*</div> : null}*/}
               <Switch>
                 <Route path={"/approval"} component={ApprovalScreen} />
                 <Route path={"/shopList"} component={ShopListScreen} />
