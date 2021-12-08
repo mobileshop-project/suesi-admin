@@ -39,7 +39,8 @@ class ApprovalScreen extends Component {
       const user = Authentication.getDecodeUser()
       console.log(user)
       this.setState({
-        accountCode: user.accountCode
+        accountCode: user.accountCode,
+        adminCode:user.accountCode
       })
     } else {
       this.setState({isRedirect: true})
