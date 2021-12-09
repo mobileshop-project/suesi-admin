@@ -7,6 +7,7 @@ import {Link, Route, Switch} from "react-router-dom";
 import ApprovalScreen from "../screen/ApprovalScreen";
 import UserListScreen from "../screen/UserListScreen";
 import CreateOfficialAccountScreen from "../screen/CreateOfficialAccountScreen";
+import Authentication from "../service/Authentication";
 class SideMenuAndData extends Component {
 
   constructor(props) {
@@ -15,6 +16,12 @@ class SideMenuAndData extends Component {
       isShow: true
     }
   }
+
+  logout(){
+    Authentication.logout();
+    window.location.reload();
+  }
+
   render() {
     const {isShow} = this.state
     return (
@@ -42,6 +49,11 @@ class SideMenuAndData extends Component {
             <Link to="createOfficialAccount" onClick={()=> this.setState({isShow: false})}>
               <MenuItem className="h-12">
                 <p className="font-PoppinsMedium">Official shop</p>
+              </MenuItem>
+            </Link>
+            <Link to="" onClick={this.logout.bind(this)}>
+              <MenuItem className="h-12">
+                <p className="font-PoppinsMedium">Logout</p>
               </MenuItem>
             </Link>
           </MenuList>
