@@ -12,6 +12,11 @@ class Home extends Component {
     const user = AuthService.deCodeJwt(AuthService.getCurrentUser())
     if(!user){
       this.props.history.push("signin")
+    }else{
+      if(user.roles[0] !== "ADMIN"){
+        localStorage.removeItem('user')
+        window.location.reload()
+      }
     }
   }
 
